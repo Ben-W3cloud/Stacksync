@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum EnrollmentStatus {
+  IN_PROGRESS
+  COMPLETE
+}
+
+enum ResourceType {
+  YOUTUBE
+  GITHUB
+  DOCS
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+}
+
+enum SubscriptionStatus {
+  NONE
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model User {
+  id                   String              @id @default(cuid())
+  name                 String?
+  email                String              @unique
+  passwordHash         String
+  coinBalance          Int                 @default(0)
+  streak               Int                 @default(0)
+  lastActivityAt       DateTime?
+  xpTotal              Int                 @default(0)
+  stripeCustomerId     String?             @unique
+  subscriptionId       String?             @unique
+  subscriptionTier     SubscriptionTier    @default(FREE)
+  subscriptionStatus   SubscriptionStatus  @default(NONE)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  enrollments          Enrollment[]
+  lessonProgress       LessonProgress[]
+}
+
+model Domain {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  slug    String   @unique
+  courses Course[]
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  slug        String       @unique
+  description String?
+  order       Int
+  isPremium   Boolean      @default(false)
+  domainId    String
+  domain      Domain       @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  modules     Module[]
+  enrollments Enrollment[]
+}
+
+model Module {
+  id       String   @id @default(cuid())
+  title    String
+  slug     String
+  order    Int
+  courseId String
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+
+  @@unique([courseId, slug])
+}
+
+model Lesson {
+  id         String             @id @default(cuid())
+  title      String
+  slug       String
+  contentMdx String
+  order      Int
+  moduleId   String
+  module     Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  quiz       Quiz?
+  resources  ExternalResource[]
+  progress   LessonProgress[]
+
+  @@unique([moduleId, slug])
+}
+
+model Quiz {
+  id           String         @id @default(cuid())
+  passingScore Int            @default(70)
+  lessonId     String         @unique
+  lesson       Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions    QuizQuestion[]
+}
+
+model QuizQuestion {
+  id      String       @id @default(cuid())
+  prompt  String
+  order   Int
+  quizId  String
+  quiz    Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options QuizOption[]
+}
+
+model QuizOption {
+  id         String       @id @default(cuid())
+  value      String
+  isCorrect  Boolean      @default(false)
+  questionId String
+  question   QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+}
+
+model ExternalResource {
+  id       String       @id @default(cuid())
+  title    String
+  url      String
+  type     ResourceType
+  lessonId String
+  lesson   Lesson       @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+}
+
+model Enrollment {
+  id        String           @id @default(cuid())
+  userId    String
+  courseId  String
+  status    EnrollmentStatus @default(IN_PROGRESS)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  lessonId    String
+  completedAt DateTime?
+  quizScore   Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
