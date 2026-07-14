@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { Coins, Flame, Zap } from "lucide-react";
+import { Award, Coins, Flame, Zap } from "lucide-react";
 import { SkillWebChart } from "@/components/skill-web-chart";
+import { ManageBillingButton } from "@/components/manage-billing-button";
+import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -12,7 +15,13 @@ export default async function DashboardPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { streak: true, xpTotal: true, coinBalance: true },
+    select: {
+      streak: true,
+      xpTotal: true,
+      coinBalance: true,
+      subscriptionTier: true,
+      stripeCustomerId: true,
+    },
   });
   if (!user) redirect("/signin");
 
@@ -45,7 +54,24 @@ export default async function DashboardPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-6xl px-6 py-10">
-      <h1 className="text-3xl font-extrabold tracking-tight">Profile Dashboard</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-3xl font-extrabold tracking-tight">Profile Dashboard</h1>
+        <div className="flex items-center gap-2">
+          <Badge variant={user.subscriptionTier === "PRO" ? "secondary" : "muted"}>
+            {user.subscriptionTier}
+          </Badge>
+          {user.subscriptionTier === "PRO" && user.stripeCustomerId ? (
+            <ManageBillingButton />
+          ) : null}
+          <Link
+            href="/certificates"
+            className="inline-flex items-center gap-1 rounded-full border-2 border-border px-4 py-2 text-sm font-semibold hover:border-primary hover:text-primary"
+          >
+            <Award className="h-4 w-4" />
+            Certificates
+          </Link>
+        </div>
+      </div>
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <Card className="flex items-center gap-4 p-5">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-streak/10 text-streak">

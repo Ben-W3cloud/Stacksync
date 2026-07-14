@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -5,6 +6,34 @@ import { LessonViewer } from "@/components/lesson-viewer";
 import { Paywall } from "@/components/paywall";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ courseSlug: string; lessonSlug: string }>;
+}): Promise<Metadata> {
+  const { courseSlug, lessonSlug } = await params;
+  const lesson = await prisma.lesson.findFirst({
+    where: { slug: lessonSlug, module: { course: { slug: courseSlug } } },
+    select: { title: true, contentMdx: true, module: { select: { course: { select: { title: true } } } } },
+  });
+
+  if (!lesson) return { title: "Lesson not found — StackSync" };
+
+  const description = lesson.contentMdx
+    .replace(/[#>*`_\-\[\]]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 155);
+  const title = `${lesson.title} — ${lesson.module.course.title} — StackSync`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "article" },
+    twitter: { card: "summary_large_image", title, description },
+  };
+}
 
 export default async function LessonPage({
   params,

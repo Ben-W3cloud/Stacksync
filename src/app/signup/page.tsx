@@ -36,7 +36,7 @@ export default function SignUpPage() {
       email,
       password,
       redirect: true,
-      callbackUrl: "/learn",
+      callbackUrl: "/onboarding",
     });
 
     if (result?.error) {

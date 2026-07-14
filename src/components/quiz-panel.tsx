@@ -6,6 +6,7 @@ import confetti from "canvas-confetti";
 import { Check, Coins, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { HubbyModal } from "@/components/hubby-modal";
 import { cn } from "@/lib/utils";
 
 type QuizOption = { id: string; value: string };
@@ -31,6 +32,7 @@ export function QuizPanel({ lessonId, quiz }: { lessonId: string; quiz: Quiz | n
   const [selections, setSelections] = useState<Record<string, string>>({});
   const [result, setResult] = useState<SubmitResponse | null>(null);
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
+  const [showHubby, setShowHubby] = useState(false);
 
   if (!quiz) {
     return (
@@ -69,6 +71,7 @@ export function QuizPanel({ lessonId, quiz }: { lessonId: string; quiz: Quiz | n
         origin: { y: 0.6 },
         colors: ["#06b6d4", "#a78bfa", "#facc15", "#10b981"],
       });
+      setShowHubby(true);
     }
   }
 
@@ -186,6 +189,13 @@ export function QuizPanel({ lessonId, quiz }: { lessonId: string; quiz: Quiz | n
       {status === "error" ? (
         <p className="mt-3 text-sm text-danger">Submission failed. Make sure you are signed in.</p>
       ) : null}
+
+      <HubbyModal
+        open={showHubby}
+        onClose={() => setShowHubby(false)}
+        variant="win"
+        reward={{ coins: 25, xp: 50 }}
+      />
     </Card>
   );
 }

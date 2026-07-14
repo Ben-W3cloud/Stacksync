@@ -7,16 +7,28 @@ import { Coins, Flame, Menu, X, Zap } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Badge } from "@/components/ui/badge";
 
-const LINKS = [
+const APP_LINKS = [
   { href: "/learn", label: "Learn" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/#pricing", label: "Pricing" },
 ];
 
+const MARKETING_LINKS = [
+  { href: "/#about", label: "About" },
+  { href: "/#features", label: "Features" },
+  { href: "/#pricing", label: "Pricing" },
+];
+
 type UserStats = { streak: number; coinBalance: number; xpTotal: number } | null;
 
-export function Navbar({ user }: { user: UserStats }) {
+export function Navbar({ user, isAdmin = false }: { user: UserStats; isAdmin?: boolean }) {
   const [open, setOpen] = useState(false);
+  const loggedIn = Boolean(user);
+  const LINKS = loggedIn
+    ? isAdmin
+      ? [...APP_LINKS, { href: "/admin", label: "Admin" }]
+      : APP_LINKS
+    : MARKETING_LINKS;
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur">

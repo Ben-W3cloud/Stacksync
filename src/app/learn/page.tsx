@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { LearningPath } from "@/components/learning-path";
+import { HubbyIntro } from "@/components/hubby-intro";
 import { Badge } from "@/components/ui/badge";
 import { authOptions } from "@/lib/auth";
 import { computeLessonStatuses } from "@/lib/lesson-status";
@@ -10,9 +11,13 @@ export default async function LearnPage() {
   const userId = session?.user?.id;
 
   const currentUser = userId
-    ? await prisma.user.findUnique({ where: { id: userId }, select: { subscriptionTier: true } })
+    ? await prisma.user.findUnique({
+        where: { id: userId },
+        select: { subscriptionTier: true, hasSeenHubbyIntro: true },
+      })
     : null;
   const isPro = currentUser?.subscriptionTier === "PRO";
+  const showHubbyIntro = Boolean(currentUser) && !currentUser?.hasSeenHubbyIntro;
 
   const domains = await prisma.domain.findMany({
     orderBy: { name: "asc" },
@@ -38,6 +43,7 @@ export default async function LearnPage() {
 
   return (
     <main className="mx-auto min-h-screen w-full max-w-4xl px-6 py-10">
+      <HubbyIntro initialOpen={showHubbyIntro} />
       <h1 className="text-3xl font-extrabold tracking-tight">Learning Path</h1>
       <p className="mt-2 text-muted-foreground">Follow your Web2 + Web3 progression roadmap.</p>
 

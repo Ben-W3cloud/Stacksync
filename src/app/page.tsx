@@ -1,30 +1,12 @@
 import Link from "next/link";
-import { Blocks, Coins, GitBranch, Layers } from "lucide-react";
+import { Blocks } from "lucide-react";
 import { LandingHero } from "@/components/landing-hero";
-import { FeatureGrid, type Feature } from "@/components/feature-grid";
+import { FeatureGrid } from "@/components/feature-grid";
 import { UpgradeButton } from "@/components/upgrade-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
-
-const FEATURES: Feature[] = [
-  {
-    icon: Layers,
-    title: "Hierarchical Curriculum",
-    body: "Domain to course to module to lesson — a real progression, not a video dump.",
-  },
-  {
-    icon: Coins,
-    title: "Sync-Coins Rewards",
-    body: "Passing quizzes mints coins and XP. Build a streak, keep the momentum.",
-  },
-  {
-    icon: GitBranch,
-    title: "Web2 + Web3 Tracks",
-    body: "Blend frontend, backend, and blockchain skill paths into one roadmap.",
-  },
-];
 
 const PRICING = [
   {
@@ -89,7 +71,7 @@ export default async function Home() {
       <section id="features" className="mt-10">
         <h2 className="text-2xl font-extrabold text-foreground">Why StackSync</h2>
         <div className="mt-4">
-          <FeatureGrid features={FEATURES} />
+          <FeatureGrid />
         </div>
       </section>
 

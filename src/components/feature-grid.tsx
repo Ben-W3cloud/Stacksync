@@ -1,15 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type { LucideIcon } from "lucide-react";
+import { Coins, GitBranch, Layers } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
-export type Feature = { icon: LucideIcon; title: string; body: string };
+const FEATURES = [
+  {
+    icon: Layers,
+    title: "Hierarchical Curriculum",
+    body: "Domain to course to module to lesson — a real progression, not a video dump.",
+  },
+  {
+    icon: Coins,
+    title: "Sync-Coins Rewards",
+    body: "Passing quizzes mints coins and XP. Build a streak, keep the momentum.",
+  },
+  {
+    icon: GitBranch,
+    title: "Web2 + Web3 Tracks",
+    body: "Blend frontend, backend, and blockchain skill paths into one roadmap.",
+  },
+];
 
-export function FeatureGrid({ features }: { features: Feature[] }) {
+export function FeatureGrid() {
   return (
     <div className="grid gap-4 md:grid-cols-3">
-      {features.map((feature, index) => (
+      {FEATURES.map((feature, index) => (
         <motion.div
           key={feature.title}
           initial={{ opacity: 0, y: 16 }}

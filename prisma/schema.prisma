@@ -31,15 +31,24 @@ enum SubscriptionStatus {
   CANCELED
 }
 
+enum Role {
+  LEARNER
+  ADMIN
+}
+
 model User {
   id                   String              @id @default(cuid())
   name                 String?
   email                String              @unique
   passwordHash         String
+  role                 Role                @default(LEARNER)
   coinBalance          Int                 @default(0)
   streak               Int                 @default(0)
   lastActivityAt       DateTime?
   xpTotal              Int                 @default(0)
+  goalTrack            String?
+  onboardedAt          DateTime?
+  hasSeenHubbyIntro    Boolean             @default(false)
   stripeCustomerId     String?             @unique
   subscriptionId       String?             @unique
   subscriptionTier     SubscriptionTier    @default(FREE)
