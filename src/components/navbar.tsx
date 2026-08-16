@@ -12,7 +12,6 @@ import { springDefault } from "@/lib/motion";
 const APP_LINKS = [
   { href: "/learn", label: "Learn" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/learn", label: "Start Learning" },
 ];
 
 const MARKETING_LINKS = [

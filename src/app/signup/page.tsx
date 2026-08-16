@@ -44,7 +44,7 @@ export default function SignUpPage() {
     });
 
     if (result?.error) {
-      setSuccess("Account created — signing you in.");
+      setError("Account created, but automatic sign-in failed. Please sign in.");
     }
   }
 

@@ -6,7 +6,7 @@ import { animate, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Check, Coins, Flame, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { fadeUp, springDefault, staggerContainer, staggerItem } from "@/lib/motion";
+import { springDefault, staggerContainer, staggerItem } from "@/lib/motion";
 
 const STATS = [
   { to: 2400, decimals: 0, prefix: "", suffix: "+", label: "Lessons across web2 + web3" },

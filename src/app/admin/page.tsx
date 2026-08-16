@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Users } from "lucide-react";
+import { BookOpen, Layers, Users } from "lucide-react";
 import { AdminCourseChart } from "@/components/admin-course-chart";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -41,11 +41,11 @@ export default async function AdminPage() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <StatCard label="Total users" value={metrics.totalUsers} icon={Users} accent="text-primary" />
-        <StatCard label="Total courses" value={metrics.courseStats.length} icon={Users} accent="text-secondary" />
+        <StatCard label="Total courses" value={metrics.courseStats.length} icon={BookOpen} accent="text-secondary" />
         <StatCard
           label="Total lessons"
           value={metrics.courseStats.reduce((sum, course) => sum + course.lessonCount, 0)}
-          icon={Users}
+          icon={Layers}
           accent="text-success"
         />
       </div>

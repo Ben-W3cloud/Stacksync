@@ -96,7 +96,7 @@ content/                  # MDX lesson source (web + blockchain domains)
 
 StackSync ships a dark-only, Apple-inspired design system:
 
-- **Tokens** — near-black tinted background (`#0b0b0e`), cyan single accent, glass cards, defined in `src/app/globals.css`
+- **Tokens** — near-black tinted background (`#0d0a14`), single violet accent, glass cards, defined in `src/app/globals.css`
 - **Typography** — Apple system font stack (SF Pro on Apple devices, Segoe fallback elsewhere)
 - **Motion** — critically damped springs by default, bounce reserved for momentum interactions; presets in `src/lib/motion.ts`
 - **System docs** — `DESIGN.md` at the repo root tracks the design decisions

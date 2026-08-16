@@ -7,12 +7,9 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
-  Lock,
-  Mail,
   Quote,
   ShieldCheck,
   Sparkles,
-  User,
   Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -253,9 +250,6 @@ function FormPanel({
               </motion.span>
             </button>
 
-            <Divider label="or continue with" />
-
-            <SocialRow variant={variant} disabled={submitting} />
           </motion.form>
 
           <motion.div
@@ -393,59 +387,6 @@ function FormField({
           className="pointer-events-none absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-primary to-transparent"
         />
       </div>
-    </div>
-  );
-}
-
-function Divider({ label }: { label: string }) {
-  return (
-    <div
-      className="my-2 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/60"
-      role="separator"
-    >
-      <span className="h-px flex-1 bg-border/80" />
-      <span>{label}</span>
-      <span className="h-px flex-1 bg-border/80" />
-    </div>
-  );
-}
-
-function SocialRow({
-  variant,
-  disabled,
-}: {
-  variant: Variant;
-  disabled: boolean;
-}) {
-  const reduce = useReducedMotion();
-  return (
-    <div className="grid grid-cols-2 gap-3">
-      {[
-        { label: "Google", letter: "G" },
-        { label: "GitHub", letter: "GH" },
-      ].map((p) => (
-        <button
-          key={p.label}
-          type="button"
-          disabled={disabled}
-          aria-label={`${variant === "signin" ? "Sign in" : "Sign up"} with ${p.label}`}
-          className="pressable group inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-border/80 bg-card/40 text-sm font-semibold text-foreground hover:border-primary/50 hover:bg-card"
-        >
-          <span
-            aria-hidden
-            className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-muted text-[11px] font-bold text-primary ring-1 ring-border"
-          >
-            {p.letter}
-          </span>
-          <motion.span
-            initial={reduce ? false : { opacity: 0, x: -4 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={springSnappy}
-          >
-            {p.label}
-          </motion.span>
-        </button>
-      ))}
     </div>
   );
 }

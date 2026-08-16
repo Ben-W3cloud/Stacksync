@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import confetti from "canvas-confetti";
 import { Check, Coins, X } from "lucide-react";
@@ -98,7 +98,7 @@ export function QuizPanel({ lessonId, quiz }: { lessonId: string; quiz: Quiz | n
                 {question.options.map((option) => {
                   const isSelected = selections[question.id] === option.id;
                   let stateClass = "border-border hover:border-primary/50";
-                  let icon: React.ReactNode = null;
+                  let icon: ReactNode = null;
 
                   if (questionResult) {
                     if (option.id === questionResult.correctOptionId) {
